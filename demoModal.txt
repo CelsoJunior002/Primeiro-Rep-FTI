@@ -1,0 +1,50 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global" controller="modalClonarCompromissoController">
+
+    <aura:attribute name="recordId" type="Id" access="global"/>
+    <aura:attribute name="Frequencia" type="string"/>
+    <aura:attribute name="IdAtualPagina" type="string"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Clonar Compromisso</h2>
+    </header>
+
+    <div class="slds-form slds-form_compound" id="isOpen">
+        <div class="slds-p-around_medium" id="modal-content-id-1">
+
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__label slds-text-title_caps"></legend>
+
+                <p>
+                    Ao clonar o compromisso, serão replicados todos os dados do compromisso atual e
+                    as datas serão alteradas conforme a opção selecionada abaixo.
+                </p>
+                <br/>
+
+                <div class="slds-form-element__row">
+
+                    <div class="slds-form-element slds-size_1-of-3">
+                        <lightning:input aura:id="quantidade" type="text" label="Repetir a cada: " name="quantidade"/>
+                    </div>
+                    <div class="slds-form-element slds-size_1-of-3">
+                        <ui:inputSelect aura:id="listaFrequencia" label="Frequencia" change="{!c.pegarValor}">
+                            <option value="">Escolha...</option>
+                            <option value="Dias">Dias</option>
+                            <option value="Semanas">Semanas</option>
+                            <option value="Meses">Meses</option>
+                        </ui:inputSelect>
+
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+    </div>
+    <footer>
+        <div align="right">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.Salvar}">Salvar</lightning:button>
+            <lightning:button class="slds-button slds-button_brand" onclick="{!c.closeModal}">Cancelar</lightning:button>
+        </div>
+    </footer>
+</aura:component>
