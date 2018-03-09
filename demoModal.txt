@@ -28,7 +28,7 @@
                     </div>
                     <div class="slds-form-element slds-size_1-of-3">
                         <ui:inputSelect aura:id="listaFrequencia" label="Frequencia" change="{!c.pegarValor}">
-                            <option value="">Escolha...</option>
+                            <option value="Escolha">Escolha...</option>
                             <option value="Dias">Dias</option>
                             <option value="Semanas">Semanas</option>
                             <option value="Meses">Meses</option>
