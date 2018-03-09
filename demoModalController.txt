@@ -1,0 +1,70 @@
+({
+      closeModal:function(component){
+
+          var dismissActionPanel = $A.get("e.force:closeQuickAction");
+          dismissActionPanel.fire();
+
+      },
+
+      doInit: function(component) {
+          console.log('init');
+          console.log(component.get("v.recordId"));
+          var idPg = component.get("v.recordId");
+          component.set("v.IdAtualPagina", idPg);
+
+      },
+
+      pegarValor: function(component){
+
+           var pegarFrequencia = component.find('listaFrequencia').get("v.value");
+           component.set("v.Frequencia", pegarFrequencia);
+
+      },
+
+      Salvar: function(component){
+
+            var Frequencia = component.get("v.Frequencia");
+            var idRegistroAtual= component.get("v.IdAtualPagina");
+            var quantidadeRepetirField = component.find('quantidade');
+            var quantidadeRepetir = quantidadeRepetirField.get("v.value");
+
+            console.log('Frequencia: ' + Frequencia);
+            console.log('Id da Página: ' + idRegistroAtual);
+            console.log('Quantidade: ' + quantidadeRepetir);
+
+
+
+            if (quantidadeRepetir > 0 && quantidadeRepetir <  31){
+
+                var action = component.get("c.clonarCompromisso");
+
+                action.setParams({"idPagina":idRegistroAtual, "pegarFrequencia":Frequencia, "qtdRepetir":quantidadeRepetir });
+
+                            action.setCallback(this, function(response){
+                                console.log('STATE');
+                                var state = response.getState();
+                                console.log(state);
+                                if (state === "SUCCESS") {
+
+                                    var result = response.getReturnValue();
+                                    var dismissActionPanel = $A.get("e.force:closeQuickAction");
+                                    dismissActionPanel.fire();
+
+                                }else{
+
+                                    alert('ERRO AO INSERIR');
+                                }
+                            });
+
+                            $A.enqueueAction(action);
+            }else{
+
+                var toast = $A.get("e.force:showToast");
+                toast.setParams({ message:'Numero deve estar entre 1 e 30!', duration: 1000, title: 'ATENÇÃO!', type: 'error'});
+                toast.fire();
+
+            }
+
+
+      }
+})

@@ -24,7 +24,7 @@
                 <div class="slds-form-element__row">
 
                     <div class="slds-form-element slds-size_1-of-3">
-                        <lightning:input aura:id="quantidade" type="text" label="Repetir a cada: " name="quantidade"/>
+                        <lightning:input aura:id="quantidade" type="text" label="Repetir: " name="quantidade" />
                     </div>
                     <div class="slds-form-element slds-size_1-of-3">
                         <ui:inputSelect aura:id="listaFrequencia" label="Frequencia" change="{!c.pegarValor}">

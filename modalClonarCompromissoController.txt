@@ -1,0 +1,89 @@
+/**
+ * Created by FTI on 06/03/2018.
+ */
+public class modalClonarCompromissoController {
+
+	public Event currentRecord{get;set;}
+
+
+	@AuraEnabled
+	public static void clonarCompromisso(string idPagina, string pegarFrequencia, double qtdRepetir){
+
+		System.debug('idPagina ' + idPagina);
+		System.debug('pegarFrequencia ' + pegarFrequencia);
+		System.debug('qtdRepetir ' + qtdRepetir);
+		List<Event> currentRecord =[SELECT Id, WhoId, OwnerId, Subject, StartDateTime, EndDateTime, Location, WhatId, IsAllDayEvent FROM Event WHERE ID =: idPagina];
+
+		system.debug('Lista retornada: ' + currentRecord);
+
+		List<Event> lstCompromisso = new List<Event>();
+
+
+		if (pegarFrequencia == 'Dias'){
+
+			double quantidadeRepetir = qtdRepetir;
+			integer i;
+
+			for(i = 1; i <= quantidadeRepetir; i++){
+
+				for (Event compromisso : currentRecord)
+					{
+
+						Event novoCompromisso = new Event();
+						novoCompromisso = compromisso.clone(false, true, true, true);
+						novoCompromisso.StartDateTime = compromisso.StartDateTime.addDays(i);
+						novoCompromisso.EndDateTime = compromisso.EndDateTime.addDays(i);
+						lstCompromisso.add(novoCompromisso);
+
+					}
+			}
+
+			insert lstCompromisso;
+
+		}
+		if (pegarFrequencia == 'Semanas'){
+
+			double quantidadeRepetir = qtdRepetir;
+			integer i;
+
+			for(i = 1; i <= quantidadeRepetir; i++){
+
+				for (Event compromisso : currentRecord)
+					{
+
+						Event novoCompromisso = new Event();
+						novoCompromisso = compromisso.clone(false, true, true, true);
+						novoCompromisso.StartDateTime = compromisso.StartDateTime.addDays(i*7);
+						novoCompromisso.EndDateTime = compromisso.EndDateTime.addDays(i*7);
+						lstCompromisso.add(novoCompromisso);
+
+					}
+			}
+
+			insert lstCompromisso;
+
+		}
+		if (pegarFrequencia == 'Meses'){
+
+			double quantidadeRepetir = qtdRepetir;
+			integer i;
+
+			for(i = 1; i <= quantidadeRepetir; i++){
+
+				for (Event compromisso : currentRecord)
+					{
+
+						Event novoCompromisso = new Event();
+						novoCompromisso = compromisso.clone(false, true, true, true);
+						novoCompromisso.StartDateTime = compromisso.StartDateTime.addMonths(i);
+						novoCompromisso.EndDateTime = compromisso.EndDateTime.addMonths(i);
+						lstCompromisso.add(novoCompromisso);
+
+					}
+			}
+
+			insert lstCompromisso;
+
+		}
+	}
+}
