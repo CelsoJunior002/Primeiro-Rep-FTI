@@ -1,0 +1,45 @@
+<apex:page docType="html-5.0" showQuickActionVfHeader="false" title="Clonar Compromisso" standardController="Event" lightningStylesheets="true" extensions="modalClonarCompromissoControllerVF">
+    <apex:slds/>
+    <apex:form>
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Clonar Compromisso</h2>
+        </header>
+        <apex:messages></apex:messages>
+        <apex:pageBlock>
+        <div class="slds-form slds-form_compound" id="isOpen">
+            <div class="slds-p-around_medium" id="modal-content-id-1">
+
+                <fieldset class="slds-form-element">
+                    <legend class="slds-form-element__label slds-text-title_caps"></legend>
+
+                    <p>
+                        Ao clonar o compromisso, serão replicados todos os dados do compromisso atual e
+                        as datas serão alteradas conforme a opção selecionada abaixo.
+                    </p>
+                    <br/>
+                    <apex:pageBlockSection>
+                        <apex:pageBlockSectionItem>
+                            <apex:outputText value="Repetir:"/>
+                            <apex:inputText label="Repetir: " id="quantidade" value="{!qtdRepetir}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem>
+                            <apex:outputText value="Frequencia:"/>
+                            <apex:selectList value="{!itemSelecionado}" multiselect="false">
+                                <apex:selectOptions value="{!items}"/>
+
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </fieldset>
+
+            </div>
+        </div>
+        <footer>
+            <div align="right">
+                <apex:commandButton action="{!Salvar}" value="Salvar" />
+                <apex:commandButton action="{!Cancelar}" value="Cancelar" />
+            </div>
+        </footer>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

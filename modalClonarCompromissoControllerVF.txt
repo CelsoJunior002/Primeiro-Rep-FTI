@@ -1,0 +1,150 @@
+/**
+ * Created by FTI on 12/03/2018.
+ */
+public with sharing class modalClonarCompromissoControllerVF {
+
+	public Event clonarCompromisso{get;set;}
+	public string itemSelecionado{get;set;}
+	public string qtdRepetir{get;set;}
+	public string currentRecord{get;set;}
+
+
+	String[] Frequenciy = new String[]{};
+
+	public modalClonarCompromissoControllerVF(ApexPages.StandardController c) {
+		this.clonarCompromisso = (Event)c.getRecord();
+		clonarCompromisso =
+		[SELECT Id, WhoId, OwnerId, Subject, StartDateTime, EndDateTime, Location, WhatId, IsAllDayEvent
+				FROM Event
+				WHERE Id = :clonarCompromisso.Id];
+
+	}
+
+	public modalClonarCompromissoControllerVF(){}
+
+	public List<SelectOption> getItems() {
+		List<SelectOption> options = new List<SelectOption>();
+		options.add(new SelectOption('Dias', 'Dias'));
+		options.add(new SelectOption('Semanas', 'Semanas'));
+		options.add(new SelectOption('Meses', 'Meses'));
+		return options;
+	}
+
+	public String[] getFrequenciy() {
+		return Frequenciy;
+	}
+
+	public void setfrequenciy(String[] Frequenciy) {
+		this.Frequenciy = Frequenciy;
+	}
+
+	public static void clonarCompromisso(string idPagina, string Frequenciy, string qtdRepetir) {
+
+		List<Event> currentRecord =
+		[SELECT Id, WhoId, OwnerId, Subject, StartDateTime, EndDateTime, Location, WhatId, IsAllDayEvent FROM Event WHERE ID =: idPagina];
+
+		List<Event> lstCompromisso = new List<Event>();
+
+
+		if (Frequenciy == 'Dias') {
+
+			double quantidadeRepetir = double.valueOf(qtdRepetir);
+			integer i;
+
+			for (i = 1; i <= quantidadeRepetir; i++) {
+
+				for (Event compromisso : currentRecord)
+					{
+
+						Event novoCompromisso = new Event();
+						novoCompromisso = compromisso.clone(false, true, true, true);
+						novoCompromisso.StartDateTime = compromisso.StartDateTime.addDays(i);
+						novoCompromisso.EndDateTime = compromisso.EndDateTime.addDays(i);
+						lstCompromisso.add(novoCompromisso);
+
+					}
+			}
+
+			insert lstCompromisso;
+
+
+		}
+		if (Frequenciy == 'Semanas') {
+
+			double quantidadeRepetir = double.valueOf(qtdRepetir);
+			integer i;
+
+			for (i = 1; i <= quantidadeRepetir; i++) {
+
+				for (Event compromisso : currentRecord)
+					{
+
+						Event novoCompromisso = new Event();
+						novoCompromisso = compromisso.clone(false, true, true, true);
+						novoCompromisso.StartDateTime = compromisso.StartDateTime.addDays(i * 7);
+						novoCompromisso.EndDateTime = compromisso.EndDateTime.addDays(i * 7);
+						lstCompromisso.add(novoCompromisso);
+
+					}
+			}
+
+			insert lstCompromisso;
+
+		}
+		if (Frequenciy == 'Meses') {
+
+			double quantidadeRepetir = double.valueOf(qtdRepetir);
+			integer i;
+
+			for (i = 1; i <= quantidadeRepetir; i++) {
+
+				for (Event compromisso : currentRecord)
+					{
+
+						Event novoCompromisso = new Event();
+						novoCompromisso = compromisso.clone(false, true, true, true);
+						novoCompromisso.StartDateTime = compromisso.StartDateTime.addMonths(i);
+						novoCompromisso.EndDateTime = compromisso.EndDateTime.addMonths(i);
+						lstCompromisso.add(novoCompromisso);
+
+					}
+			}
+
+			insert lstCompromisso;
+
+		}
+	}
+
+
+	public PageReference Salvar() {
+
+		boolean validaClone = true;
+
+		if (qtdRepetir > '0' && qtdRepetir < '31' && itemSelecionado != '') {
+			modalClonarCompromissoControllerVF.clonarCompromisso(clonarCompromisso.Id, itemSelecionado, qtdRepetir);
+			apexPages.addMessage(new ApexPages.Message(ApexPages.severity.CONFIRM, 'Registro clonado com Sucesso!!'));
+
+		} else {
+			validaClone = false;
+			apexPages.addMessage(new ApexPages.Message(ApexPages.severity.WARNING,
+					'Entre com a quantidade a Repetir e com a Frequencia para continuar!'));
+		}
+
+		PageReference page = new PageReference('/' + clonarCompromisso.id);
+
+		page.setRedirect(true);
+
+		if (validaClone == true) return page;
+
+		return null;
+
+	}
+
+	public PageReference Cancelar() {
+		PageReference cancelar = new PageReference('/' + clonarCompromisso.id);
+		return cancelar;
+
+
+	}
+
+}
